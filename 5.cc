@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <stack>
+#include <queue>
 
 class my_queue{
 public:
@@ -36,18 +37,66 @@ private:
     std::stack<int> s2;
 };
 
-int main(){
-    my_queue m;
+class my_stack{
+public:
+    void Push(int data){
+        q1.push(data);
+    }
 
-    m.Push(1);
-    m.Push(2);
-    std::cout << "pop " << m.Pop() << std::endl;
-    m.Push(3);
-    m.Push(4);
+    int Pop(){
+        int tmp;
+        if(!q1.empty()){
+            while(q1.size() > 1){
+                tmp = q1.front();
+                q1.pop();
+                q2.push(tmp);
+            }
+
+            tmp = q1.front();
+            q1.pop();
+            return tmp;
+        }else{
+            while(q2.size() > 1){
+                tmp = q2.front();
+                q2.pop();
+                q1.push(tmp);
+            }
+
+            tmp = q2.front();
+            q2.pop();
+            return tmp;
+        }
+    }
+
+private:
+    std::queue<int> q1;
+    std::queue<int> q2;
+};
+
+int main(){
+    // my_queue m;
+
+    // m.Push(1);
+    // m.Push(2);
     // std::cout << "pop " << m.Pop() << std::endl;
-    std::cout << "pop " << m.Pop() << std::endl;
-    std::cout << "pop " << m.Pop() << std::endl;
-    std::cout << "pop " << m.Pop() << std::endl;
+    // m.Push(3);
+    // m.Push(4);
+    // // std::cout << "pop " << m.Pop() << std::endl;
+    // std::cout << "pop " << m.Pop() << std::endl;
+    // std::cout << "pop " << m.Pop() << std::endl;
+    // std::cout << "pop " << m.Pop() << std::endl;
+
+    my_stack s;
+    s.Push(1);
+    s.Push(2);
+    std::cout << "pop " << s.Pop() << std::endl;
+    s.Push(3);
+    s.Push(4);
+
+    // std::cout << "pop " << s.Pop() << std::endl;
+    std::cout << "pop " << s.Pop() << std::endl;
+    std::cout << "pop " << s.Pop() << std::endl;
+    std::cout << "pop " << s.Pop() << std::endl;
 
     return 0;
 }
