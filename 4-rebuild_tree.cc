@@ -49,6 +49,7 @@ TreeNode* p_m_rebuild(std::vector<int> &pre, std::vector<int> &vin, int p_start,
         // std::cout << " i " << i << std::endl;
     }
 
+    //重点注意此处数据关系的计算，关键在于截至数的计算方式为：起始数+数据个数
     root->left = p_m_rebuild(pre, vin, p_start+1, p_start+1+(i-v_start), v_start, i);
     root->right = p_m_rebuild(pre, vin, p_start+1+(i-v_start), p_end, i + 1, v_end);
 
@@ -58,8 +59,8 @@ TreeNode* p_m_rebuild(std::vector<int> &pre, std::vector<int> &vin, int p_start,
 TreeNode* s_m_rebuild(std::vector<int> &suf, std::vector<int> &vin, int s_start, 
     int s_end, int v_start, int v_end){
 
-    std::cout << "s_start " << s_start << " s_end " << s_end << " v_start " 
-        << v_start << " v_end " << v_end << std::endl;
+    // std::cout << "s_start " << s_start << " s_end " << s_end << " v_start " 
+    //     << v_start << " v_end " << v_end << std::endl;
     int i = 0;
     
     if(!suf.size() || !vin.size())
@@ -74,22 +75,24 @@ TreeNode* s_m_rebuild(std::vector<int> &suf, std::vector<int> &vin, int s_start,
     }
 
     TreeNode* root = new TreeNode(suf[s_end - 1]);
+    // std::cout << "build " << suf[s_end-1] << " in" <<std::endl;
     assert(root);
 
     for(i=v_start; i<v_end; i++){
-        std::cout << " vin[" << i << "] " << vin[i] << " suf[" << s_end - 1 << "] " 
-            << suf[s_end-1] << std::endl;
+        // std::cout << " vin[" << i << "] " << vin[i] << " suf[" << s_end - 1 << "] " 
+        //     << suf[s_end-1] << std::endl;
         if(vin[i] == suf[s_end - 1])
             break;
     }
     if(i == v_end){
         assert(0 == "not get here");
     }else{
-        std::cout << " i " << i << std::endl;
+        // std::cout << " i " << i << std::endl;
     }
 
-    root->left = s_m_rebuild(suf, vin, s_start, i, v_start, i);
-    root->right = s_m_rebuild(suf, vin, i, s_end-1, i + 1, v_end);
+    //重点注意此处数据关系的计算，关键在于截至数的计算方式为：起始数+数据个数
+    root->left = s_m_rebuild(suf, vin, s_start, s_start+i-v_start, v_start, i);
+    root->right = s_m_rebuild(suf, vin, s_start+i-v_start, s_end-1, i + 1, v_end);
 
     return root;
 }
