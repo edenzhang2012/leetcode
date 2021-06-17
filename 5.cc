@@ -37,6 +37,9 @@ private:
     std::stack<int> s2;
 };
 
+/*
+用两个队列来实现一个栈，完成栈的Push和Pop操作。 栈中的元素为int类型。
+*/
 class my_stack{
 public:
     void Push(int data){
