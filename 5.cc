@@ -1,105 +1,100 @@
 /*
-用两个栈来实现一个队列，完成队列的Push和Pop操作。 队列中的元素为int类型。
+输入一个链表，按链表从尾到头的顺序返回一个ArrayList。
 */
 
-#include <iostream>
-#include <stack>
-#include <queue>
+#include <stdio.h>
+#include <assert.h>
+#include <string.h>
+#include <stdlib.h>
 
-class my_queue{
-public:
-    void Push(int data){
-        s1.push(data);
-    }
-
-    int Pop(){
-        int tmp;
-        if(!s2.empty()){
-            tmp = s2.top();
-            s2.pop();
-        }else{
-            while(!s1.empty()){
-                tmp = s1.top();
-                // std::cout << " trans " << tmp << std::endl;
-                s1.pop();
-                s2.push(tmp);
-            }
-
-            tmp = s2.top();
-            // std::cout << " push " << tmp << std::endl;
-            s2.pop();
-        }
-        return tmp;
-    }
-
-private:
-    std::stack<int> s1;
-    std::stack<int> s2;
+/*规定的单链结构体*/
+struct ListNode {
+    int val;
+    struct ListNode *next;
 };
 
-/*
-用两个队列来实现一个栈，完成栈的Push和Pop操作。 栈中的元素为int类型。
-*/
-class my_stack{
-public:
-    void Push(int data){
-        q1.push(data);
+void list_add(struct ListNode **head, int data){
+    if(NULL == *head){
+        *head = (struct ListNode *)calloc(1, sizeof(struct ListNode));
+        assert(*head);
+        (*head)->val = data;
+        (*head)->next = NULL;
+        return;
     }
 
-    int Pop(){
-        int tmp;
-        if(!q1.empty()){
-            while(q1.size() > 1){
-                tmp = q1.front();
-                q1.pop();
-                q2.push(tmp);
-            }
-
-            tmp = q1.front();
-            q1.pop();
-            return tmp;
-        }else{
-            while(q2.size() > 1){
-                tmp = q2.front();
-                q2.pop();
-                q1.push(tmp);
-            }
-
-            tmp = q2.front();
-            q2.pop();
-            return tmp;
-        }
+    struct ListNode *node = *head;
+    struct ListNode *temp = NULL;
+    if(NULL == node->next){
+        temp = (struct ListNode *)calloc(1, sizeof(struct ListNode));
+        assert(temp);
+        temp->next = NULL;
+        temp->val = data;
+        node->next = temp;
+        return;
     }
 
-private:
-    std::queue<int> q1;
-    std::queue<int> q2;
-};
+    while(NULL != node->next){
+        node = node->next;
+    }
+
+    temp = (struct ListNode *)calloc(1, sizeof(struct ListNode));
+    assert(temp);
+    temp->next = NULL;
+    temp->val = data;
+    node->next = temp;
+    return;
+}
+
+//递归调用
+void print_end_to_start_recursion(struct ListNode *head){
+    if(NULL == head){
+        printf("empty\n");
+        return;
+    }
+
+    if(NULL == head->next){
+        printf("%d\n", head->val);
+        return;
+    }
+
+    print_end_to_start_recursion(head->next);
+    printf("%d\n", head->val);
+    return;
+}
+
+//非递归方式，想办法将链表反转
+void print_end_to_start(struct ListNode *head){
+    if(NULL == head){
+        printf("empty\n");
+        return;
+    }
+
+    if(NULL == head->next){
+        printf("%d\n", head->val);
+        return;
+    }
+
+
+}
+
+void print_list(struct ListNode *head){
+    if(NULL == head)
+        printf("empty\n");
+
+    struct ListNode *node = head;
+    while(NULL != node){
+        printf("%d\n", node->val);
+        node = node->next;
+    }
+}
 
 int main(){
-    // my_queue m;
+    struct ListNode *node = NULL;
+    list_add(&node, 67);
+    list_add(&node, 0);
+    list_add(&node, 24);
+    list_add(&node, 58);
 
-    // m.Push(1);
-    // m.Push(2);
-    // std::cout << "pop " << m.Pop() << std::endl;
-    // m.Push(3);
-    // m.Push(4);
-    // // std::cout << "pop " << m.Pop() << std::endl;
-    // std::cout << "pop " << m.Pop() << std::endl;
-    // std::cout << "pop " << m.Pop() << std::endl;
-    // std::cout << "pop " << m.Pop() << std::endl;
-
-    my_stack s;
-    s.Push(1);
-    s.Push(2);
-    std::cout << "pop " << s.Pop() << std::endl;
-    s.Push(3);
-    s.Push(4);
-
-    // std::cout << "pop " << s.Pop() << std::endl;
-    std::cout << "pop " << s.Pop() << std::endl;
-    std::cout << "pop " << s.Pop() << std::endl;
-    std::cout << "pop " << s.Pop() << std::endl;
-
-    return 0;
+    print_list(node);
+    print_end_to_start_recursion(node);
 }

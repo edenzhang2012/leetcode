@@ -1,19 +1,63 @@
 /*
-一只青蛙一次可以跳上1级台阶，也可以跳上2级……它也可以跳上n级。求该青蛙跳上一个n级的台阶
-(n为正整数)总共有多少种跳法。
+要求输入一个整数n，请你输出斐波那契数列的第n项（从0开始，第0项为0，第1项是1）
 */
 
 /*
 分析：
-1. 1级台阶  1种跳法
-2. 2级台阶  2种跳法
-3. 3级台阶  3种跳法 f(1)+f(2)
-4. 4级台阶  6种跳法 f(1)+f(2)+f(3)
-5. n级台阶  f(n-1)+f(n-2)+f(n-3)+...+f(1)
-
-f(n) = f(n-1)+f(n-2)+f(n-3)+...+f(1)
-f(n-1) = f(n-2)+f(n-3)+f(n-4)+...+f(1)
-
-所以 f(n) = 2f(n-1)
-也可以套用例7
+1.斐波那契数列，典型的递归应用场景。但是会有较多的重复计算，效率低下
+2.循环版
 */
+
+#include <iostream>
+
+//递归实现
+int Fibonacci1(int n){
+    if(n < 0){
+        std::cerr << "invalid params" << std::endl;
+        return 0;
+    }
+
+    if(0 == n){
+        return 0;
+    }
+
+    if(1 == n){
+        return 1;
+    }
+
+    return Fibonacci1(n-2) + Fibonacci1(n-1);
+}
+
+//循环实现
+int Fibonacci2(int n){
+    if(n < 0){
+        std::cerr << "invalid params" << std::endl;
+        return 0;
+    }
+
+    if(0 == n){
+        return 0;
+    }
+
+    if(1 == n){
+        return 1;
+    }
+
+
+    int ppre = 0;
+    int pre = 1;
+    int right = -1;
+    for(int i=2; i<=n; i++){
+        right = pre + ppre;
+        ppre = pre;
+        pre = right;
+    }
+
+    return right;
+}
+
+int main(){
+
+    uint64_t ret = Fibonacci2(50);
+    std::cout << "ret = " << ret << std::endl;
+}
