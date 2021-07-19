@@ -19,6 +19,9 @@
 */
 
 #include <iostream>
+#include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 /*
 从1开始对num_str每次递增1，一直到达到最大值时返回true
@@ -27,23 +30,41 @@
 bool inc_num_to_max(char *num_str){
     bool overflow = false;
     int length = strlen(num_str);
-    int i = 0;
+    int i = 0, inc_bit = 0;
 
     for(i=length-1; i>=0; i--){
-        if
-
         if('9' == num_str[i]){
-            if(0 == i){
+            if(i == 0){
                 overflow = true;
-                brek;
+                break;
+            }else{
+                num_str[i] = '0';
+                continue;
             }
-            num_str[i] = '0';
-            continue;
         }else{
             num_str[i] += 1;
             break;
         }
     }
+
+    if(overflow)
+        return true;
+    else
+        return false;
+}
+
+//跳过其实的‘0’，只打印后面的字符串
+void print_num(char *num_str){
+    int str_length = strlen(num_str);
+    int i = 0;
+    for(i=0; i<str_length; i++){
+        if(num_str[i] == '0')
+            continue;
+        else
+            break;
+    }
+
+    printf("%s ", &num_str[i]);
 }
 
 /*
@@ -71,7 +92,45 @@ int print_max_number(int n){
     return 0;
 }
 
+/*
+递归填充num_str的每一位数字
+*/
+void print_number_recursively(char *str, int length, int index){
+    if(index == length - 1){
+        print_num(str);
+        return;
+    }
+
+    for(int i=0; i<10; i++){
+        str[index + 1] = i + '0';
+        print_number_recursively(str, length, index + 1);
+    }
+}
+
+/*
+第二种解法：
+    首先我们认为，每一位的数字都只能是“0-9”中的任意一个，大数字符串既是每一位都是
+    “0-9”其中一个全排列，打印时将字符串首部的‘0’不打印出来即可
+    全排列用递归根容易表达，数字的每一位都可能是 0-9 中的一个数，然后设置下一位。
+    递归结束的条件是我们已经设置了数字的最后一位。
+*/
+void print_max_number_recursively(int n){
+    if(n <= 0){
+        return;
+    }
+
+    char *num_str = new char[n + 1];
+    num_str[n] = '\0';
+
+    for(int i=0; i<10; i++){
+        num_str[0] = i + '0';
+        print_number_recursively(num_str, n, 0);
+    }
+}
+
 int main(){
 
+    // print_max_number(3);
+    print_max_number_recursively(3);
     return 0;
 }
