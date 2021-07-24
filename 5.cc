@@ -45,6 +45,21 @@ void list_add(struct ListNode **head, int data){
     return;
 }
 
+void release_list(struct ListNode** head){
+    struct ListNode* p = NULL;
+    struct ListNode* q = NULL;
+
+    if(NULL == *head)
+        return;
+
+    p = *head;
+    while(p){
+        *head = p->next;
+        free(p);
+        p = *head;
+    }
+}
+
 //递归调用
 void print_end_to_start_recursion(struct ListNode *head){
     if(NULL == head){
@@ -97,4 +112,5 @@ int main(){
 
     print_list(node);
     print_end_to_start_recursion(node);
+    release_list(&node);
 }
