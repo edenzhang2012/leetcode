@@ -1,10 +1,19 @@
 /*
-输入一个链表，按链表从尾到头的顺序返回一个ArrayList。
+定义一个函数，输入一个链表的头结点，反转该链表并输出反转后链表的头结点。
+*/
+
+/*
+分析：
+准备一个指针rhead先为空，head为原链表的头，让指针p = head; head = head->next; 
+p->next = rhead; rhead = p;依次循环，直到head==NULL;
+NOTE:
+    1. 链表为空
+    2. 链表只有一个元素
+    3. 链表有多个元素
 */
 
 #include <stdio.h>
 #include <assert.h>
-#include <string.h>
 #include <stdlib.h>
 
 /*规定的单链结构体*/
@@ -60,38 +69,6 @@ void release_list(struct ListNode** head){
     }
 }
 
-//递归调用
-void print_end_to_start_recursion(struct ListNode *head){
-    if(NULL == head){
-        printf("empty\n");
-        return;
-    }
-
-    if(NULL == head->next){
-        printf("%d\n", head->val);
-        return;
-    }
-
-    print_end_to_start_recursion(head->next);
-    printf("%d\n", head->val);
-    return;
-}
-
-//非递归方式，想办法将链表反转
-void print_end_to_start(struct ListNode *head){
-    if(NULL == head){
-        printf("empty\n");
-        return;
-    }
-
-    if(NULL == head->next){
-        printf("%d\n", head->val);
-        return;
-    }
-
-
-}
-
 void print_list(struct ListNode *head){
     if(NULL == head)
         printf("empty\n");
@@ -104,14 +81,48 @@ void print_list(struct ListNode *head){
     printf("\n");
 }
 
-int main(){
-    struct ListNode *node = NULL;
-    list_add(&node, 67);
-    list_add(&node, 0);
-    list_add(&node, 24);
-    list_add(&node, 58);
+struct ListNode *reverse_list(struct ListNode * head){
+    if(NULL == head){
+        return NULL;
+    }
 
-    print_list(node);
-    print_end_to_start_recursion(node);
-    release_list(&node);
+    struct ListNode *rhead = NULL;
+    struct ListNode *p = NULL;
+
+    while(head){
+        p = head;
+        head = head->next;
+        p->next = rhead;
+        rhead = p;
+    }
+
+    return rhead;
+}
+
+int main(){
+    struct ListNode *head = NULL;
+    struct ListNode *rhead = NULL;
+    list_add(&head, 1);
+    list_add(&head, 2);
+    list_add(&head, 3);
+    list_add(&head, 4);
+    list_add(&head, 5);
+    print_list(head);
+
+    rhead = reverse_list(head);
+    print_list(rhead);
+    release_list(&rhead);
+
+    rhead = reverse_list(NULL);
+    print_list(rhead);
+    release_list(&rhead);
+
+    head = NULL;
+    list_add(&head, 5);
+    print_list(head);
+    rhead = reverse_list(head);
+    print_list(rhead);
+    release_list(&rhead);
+
+    return 0;
 }
