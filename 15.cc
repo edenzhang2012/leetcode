@@ -14,10 +14,15 @@ n-k+1（k<=n） 个, 这样需要先遍历一遍链表拿到n值，然后再遍�
 开始走，则当p1走到末尾时，p2正好落在倒数第3个位置上。利用这个规律可以达到我们想要的结果
               p1
 |_1_|_2_|_3_|_4_|_5_|_6_|
+注意几种特殊情况：
+    1. k == 0, 由于没有倒数第0个的说法，直接返回NULL就行
+    2. k > 链表长度，即p1还未走过k格，就到达链表末尾了，直接返NULL
+    3. 链表为空链表
 */
 
 #include <stdio.h>
 #include <assert.h>
+#include <stdlib.h>
 
 /*规定的单链结构体*/
 struct ListNode {
@@ -58,12 +63,67 @@ void list_add(struct ListNode **head, int data){
 }
 
 struct ListNode *find_back_point(struct ListNode *head, int k){
-    if(NULL == head || 0 == K)
+    if(NULL == head || 0 == k)
         return NULL;
+
+    int i = 1;
+    struct ListNode *p1 = NULL;
+    struct ListNode *p2 = NULL;
+    
+    p1 = head;
+    while(NULL != p1){
+        if(i == k){
+            p2 = head;
+        }else{
+            if(p2)
+                p2 = p2->next;
+        }
+
+        i++;
+        p1 = p1->next;
+    }
+
+    /* k > num_of_list */
+    if(i < k){
+        return NULL;
+    }
+
+    return p2;
 }
 
 int main(){
+    struct ListNode *head = NULL;
+    struct ListNode *p = NULL;
 
+    list_add(&head, 1);
+    list_add(&head, 2);
+    list_add(&head, 3);
+    list_add(&head, 4);
+    list_add(&head, 5);
+
+    p = find_back_point(head, 1);
+    if(p)
+        printf("k=1, val=%d\n", p->val);
+    else
+        printf("k=1, val=NULL\n");
+
+    p = find_back_point(head, 3);
+    if(p)
+        printf("k=3, val=%d\n", p->val);
+    else
+        printf("k=3, val=NULL\n");
+
+    p = find_back_point(head, 5);
+    if(p)
+        printf("k=5, val=%d\n", p->val);
+    else
+        printf("k=5, val=NULL\n");
+
+    p = find_back_point(head, 6);
+    if(p)
+        printf("k=6, val=%d\n", p->val);
+    else
+        printf("k=6, val=NULL\n");
 
     return 0;
 }
