@@ -81,6 +81,7 @@ void print_list(struct ListNode *head){
     printf("\n");
 }
 
+//TODO: do it with recursively method 
 struct ListNode *reverse_list(struct ListNode * head){
     if(NULL == head){
         return NULL;
